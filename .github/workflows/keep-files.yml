@@ -1,0 +1,21 @@
+# 外部のブログに貼られたブログパーツが直リンクしているファイルが、消えたり中身が変わったりしていないかを確かめる (README 参照)
+name: Keep files
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - run: sha256sum --check --strict KEEP.sha256
+      - run: test -f index.html
